@@ -1,8 +1,13 @@
+import { syncUser } from "@/app/actions/user.acion";
 import DesktopNavbar from "@/components/DesktopNavbar";
 import MobileNavar from "@/components/MobileNavar";
+import { currentUser } from "@clerk/nextjs/server";
+
 import Link from "next/link";
 
-const Navbar = () => {
+const Navbar = async () => {
+    const user = await currentUser();
+    if (user) await syncUser();
     return (
         <nav className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
             <div className="max-w-7xl mx-auto px-4">
