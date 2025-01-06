@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 export async function createPost(content: string, image: string) {
     try {
         const userId = await getDbUserId();
+        if (!userId) return;
         const post = await prisma.post.create({
             data: {
                 content,
@@ -23,51 +24,4 @@ export async function createPost(content: string, image: string) {
     }
 }
 
-export async function toggleFollow(targetUserId: string) {
-    try {
-        const userId = await getDbUserId();
-        if (userId === targetUserId)
-            throw new Error("You cannot follow yourself");
-        const existingFollow = await prisma.follows.findUnique({
-            where: {
-                followerId_followingId: {
-                    followerId: userId,
-                    followingId: targetUserId,
-                },
-            },
-        });
-        if (existingFollow) {
-            // unfollow
-            await prisma.follows.delete({
-                where: {
-                    followerId_followingId: {
-                        followerId: userId,
-                        followingId: targetUserId,
-                    },
-                },
-            });
-        } else {
-            //folow
-            await prisma.$transaction([
-                prisma.follows.create({
-                    data: {
-                        followerId: userId,
-                        followingId: targetUserId,
-                    },
-                }),
-                prisma.notification.create({
-                    data: {
-                        type: "FOLLOW",
-                        userId: targetUserId, // user being follower,
-                        creatorId: userId, // user follow
-                    },
-                }),
-            ]);
-        }
-        revalidatePath("/");
-        return { success: true };
-    } catch (error) {
-        console.log("Error in toggleFollow", error);
-        return { success: false, error: "Error toggle follow" };
-    }
-}
+export async function getPosts() {}
