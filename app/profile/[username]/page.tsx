@@ -1,4 +1,4 @@
 const ProfilePage = () => {
-    return <div>page profle</div>;
+    return <div>Profile </div>;
 };
 export default ProfilePage;
