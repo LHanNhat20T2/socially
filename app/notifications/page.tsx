@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatDistanceToNow } from "date-fns";
 import { HeartIcon, MessageCircleIcon, UserPlusIcon } from "lucide-react";
+import Image from "next/image";
 
 type Notifications = Awaited<ReturnType<typeof getNotification>>;
 
@@ -123,7 +124,7 @@ function NotificationsPage() {
                                                         </p>
                                                         {notification.post
                                                             .image && (
-                                                            <img
+                                                            <Image
                                                                 src={
                                                                     notification
                                                                         .post
