@@ -1,6 +1,6 @@
 "use server";
 
-import { getDbUserId } from "@/app/actions/user.acion";
+import { getDbUserId } from "@/app/actions/user.action";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 

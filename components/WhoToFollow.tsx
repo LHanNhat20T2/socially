@@ -1,6 +1,6 @@
 "use server";
 
-import { getRandomUser } from "@/app/actions/user.acion";
+import { getRandomUser } from "@/app/actions/user.action";
 import FollowButton from "@/components/FollowButton";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

@@ -139,18 +139,20 @@ const PostCard = ({
                                 {post.content}
                             </p>
                         </div>
-
-                        {/* Post Image */}
-                        {post.image && (
-                            <div className="rounded-lg overflow-hidden">
-                                <Image
-                                    src={post.image}
-                                    alt="Post content"
-                                    className="w-full h-auto object-cover"
-                                />
-                            </div>
-                        )}
                     </div>
+                    {/* Post Image */}
+                    {post.image && (
+                        <div className="rounded-lg overflow-hidden w-[600px] h-[600px]">
+                            <Image
+                                src={post.image}
+                                alt="Post content"
+                                width={600}
+                                height={600}
+                                quality={100}
+                                className="object-cover max-w-[600px] max-h-[600px] w-auto h-auto"
+                            />
+                        </div>
+                    )}
                     {/* Like and comment button */}
                     <div className="flex items-center pt-2 space-x-4">
                         {user ? (

@@ -1,4 +1,4 @@
-import { syncUser } from "@/app/actions/user.acion";
+import { syncUser } from "@/app/actions/user.action";
 import DesktopNavbar from "@/components/DesktopNavbar";
 import MobileNavar from "@/components/MobileNavar";
 import { currentUser } from "@clerk/nextjs/server";

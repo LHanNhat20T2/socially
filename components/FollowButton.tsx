@@ -1,6 +1,6 @@
 "use client";
 
-import { toggleFollow } from "@/app/actions/user.acion";
+import { toggleFollow } from "@/app/actions/user.action";
 import { Button } from "@/components/ui/button";
 import { Loader2Icon } from "lucide-react";
 import { useState } from "react";

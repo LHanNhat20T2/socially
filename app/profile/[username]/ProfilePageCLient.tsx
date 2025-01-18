@@ -5,7 +5,6 @@ import {
     getUserLikedPosts,
     updateProfile,
 } from "@/app/actions/profile.action";
-import { toggleFollow } from "@/app/actions/user.acion";
 import { useUser, SignInButton } from "@clerk/nextjs";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -34,16 +33,73 @@ import {
     MapPinIcon,
 } from "lucide-react";
 import PostCard from "@/components/PostCard";
-type User = Awaited<ReturnType<typeof getProfileByUsername>>;
-type Posts = Awaited<ReturnType<typeof getUserLikedPosts>>;
+import { toggleFollow } from "@/app/actions/user.action";
+
+type User = {
+    id: string;
+    username: string;
+    name: string | null;
+    bio: string | null;
+    location: string | null;
+    website: string | null;
+    image: string | null;
+    createdAt: Date;
+    _count: {
+        followers: number;
+        following: number;
+        posts: number;
+    };
+};
+type Comment = {
+    id: string;
+    createdAt: Date;
+    authorId: string;
+    content: string;
+    postId: string;
+    author: {
+        id: string;
+        username: string;
+        name: string | null;
+        image: string | null;
+    };
+};
+
+type Like = {
+    id: string;
+    userId: string;
+    postId: string;
+    createdAt: Date;
+};
+
+type Post = {
+    id: string;
+    content: string | null;
+    createdAt: Date;
+    authorId: string;
+    comments: Comment[];
+    likes: Like[];
+    _count: {
+        comments: number;
+        likes: number;
+    };
+    author: {
+        id: string;
+        username: string;
+        name: string | null;
+        image: string | null;
+    };
+};
+
+type Posts = Post[];
 
 interface ProfilePageClientProps {
-    user: NonNullable<User>;
+    user: User;
     posts: Posts;
     likedPosts?: Posts;
     isFollowing: boolean;
 }
-function ProfilePageCLient({
+
+function ProfilePageClient({
     isFollowing: initialIsFollowing,
     likedPosts = [],
     posts,
@@ -345,4 +401,4 @@ function ProfilePageCLient({
         </div>
     );
 }
-export default ProfilePageCLient;
+export default ProfilePageClient;

@@ -132,6 +132,8 @@ function NotificationsPage() {
                                                                 }
                                                                 alt="Post content"
                                                                 className="mt-2 rounded-md w-full max-w-[200px] h-auto object-cover"
+                                                                width={200}
+                                                                height={300}
                                                             />
                                                         )}
                                                     </div>

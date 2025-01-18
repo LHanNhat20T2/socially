@@ -1,4 +1,4 @@
-import { getUserByClerkId } from "@/app/actions/user.acion";
+import { getUserByClerkId } from "@/app/actions/user.action";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

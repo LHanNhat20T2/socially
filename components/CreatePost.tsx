@@ -1,5 +1,6 @@
 "use client";
 import { createPost } from "@/app/actions/post.action";
+import ImageUpload from "@/components/ImageUpload";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -53,6 +54,18 @@ const CreatePost = () => {
                     </div>
 
                     {/* Todo: handle Image Uploads */}
+                    {(showImageUpload || imageUrl) && (
+                        <div className="border rounded-lg p-4">
+                            <ImageUpload
+                                endpoint="imageUploader"
+                                value={imageUrl}
+                                onchange={(url) => {
+                                    setImageUrl(url);
+                                    if (!url) setShowImageUpload(false);
+                                }}
+                            />
+                        </div>
+                    )}
                     <div className="flex items-center justify-between border-t pt-4">
                         <div className="flex space-x-2">
                             <Button
