@@ -2,20 +2,14 @@
 
 import {
     getProfileByUsername,
-    getUserLikedPosts,
+    getUserPosts,
     updateProfile,
 } from "@/app/actions/profile.action";
-import { useUser, SignInButton } from "@clerk/nextjs";
-import { useState } from "react";
-import toast from "react-hot-toast";
+import { toggleFollow } from "@/app/actions/user.action";
+import PostCard from "@/components/PostCard";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     Dialog,
     DialogClose,
@@ -23,6 +17,12 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import { format } from "date-fns";
 import {
     CalendarIcon,
@@ -32,84 +32,30 @@ import {
     LinkIcon,
     MapPinIcon,
 } from "lucide-react";
-import PostCard from "@/components/PostCard";
-import { toggleFollow } from "@/app/actions/user.action";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
-type User = {
-    id: string;
-    username: string;
-    name: string | null;
-    bio: string | null;
-    location: string | null;
-    website: string | null;
-    image: string | null;
-    createdAt: Date;
-    _count: {
-        followers: number;
-        following: number;
-        posts: number;
-    };
-};
-type Comment = {
-    id: string;
-    createdAt: Date;
-    authorId: string;
-    content: string;
-    postId: string;
-    author: {
-        id: string;
-        username: string;
-        name: string | null;
-        image: string | null;
-    };
-};
-
-type Like = {
-    id: string;
-    userId: string;
-    postId: string;
-    createdAt: Date;
-};
-
-type Post = {
-    id: string;
-    content: string | null;
-    createdAt: Date;
-    authorId: string;
-    comments: Comment[];
-    likes: Like[];
-    _count: {
-        comments: number;
-        likes: number;
-    };
-    author: {
-        id: string;
-        username: string;
-        name: string | null;
-        image: string | null;
-    };
-};
-
-type Posts = Post[];
+type User = Awaited<ReturnType<typeof getProfileByUsername>>;
+type Posts = Awaited<ReturnType<typeof getUserPosts>>;
 
 interface ProfilePageClientProps {
-    user: User;
+    user: NonNullable<User>;
     posts: Posts;
-    likedPosts?: Posts;
+    likedPosts: Posts;
     isFollowing: boolean;
 }
 
 function ProfilePageClient({
     isFollowing: initialIsFollowing,
-    likedPosts = [],
+    likedPosts,
     posts,
     user,
 }: ProfilePageClientProps) {
     const { user: currentUser } = useUser();
-
     const [showEditDialog, setShowEditDialog] = useState(false);
     const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
     const [isUpdatingFollow, setIsUpdatingFollow] = useState(false);
+
     const [editForm, setEditForm] = useState({
         name: user.name || "",
         bio: user.bio || "",
@@ -132,11 +78,13 @@ function ProfilePageClient({
 
     const handleFollow = async () => {
         if (!currentUser) return;
+
         try {
             setIsUpdatingFollow(true);
             await toggleFollow(user.id);
             setIsFollowing(!isFollowing);
         } catch (error) {
+            console.log(error);
             toast.error("Failed to update follow status");
         } finally {
             setIsUpdatingFollow(false);
@@ -147,6 +95,7 @@ function ProfilePageClient({
         currentUser?.username === user.username ||
         currentUser?.emailAddresses[0].emailAddress.split("@")[0] ===
             user.username;
+
     const formattedDate = format(new Date(user.createdAt), "MMMM yyyy");
 
     return (
@@ -271,7 +220,7 @@ function ProfilePageClient({
                         <TabsTrigger
                             value="posts"
                             className="flex items-center gap-2 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary
-                 data-[state=active]:bg-transparent px-6 font-semibold"
+               data-[state=active]:bg-transparent px-6 font-semibold"
                         >
                             <FileTextIcon className="size-4" />
                             Posts
@@ -279,7 +228,7 @@ function ProfilePageClient({
                         <TabsTrigger
                             value="likes"
                             className="flex items-center gap-2 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary
-                 data-[state=active]:bg-transparent px-6 font-semibold"
+               data-[state=active]:bg-transparent px-6 font-semibold"
                         >
                             <HeartIcon className="size-4" />
                             Likes

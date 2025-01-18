@@ -45,6 +45,7 @@ function NotificationsPage() {
                     await markNotificationAsRead(unreadIds);
                 }
             } catch (error) {
+                console.log("Failed", error);
                 toast.error("Failed to fetch notifications");
             } finally {
                 setIsLoading(false);

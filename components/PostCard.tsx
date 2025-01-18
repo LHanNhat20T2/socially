@@ -51,6 +51,7 @@ const PostCard = ({
             setOptimisticLikes((prev) => prev + (hasLiked ? -1 : 1));
             await toggleLike(post.id);
         } catch (error) {
+            console.log(error);
             setOptimisticLikes(post._count.likes);
             setHasLiked(false);
         } finally {
@@ -68,6 +69,8 @@ const PostCard = ({
                 setNewComment("");
             }
         } catch (error) {
+            console.log(error);
+
             toast.error("Failed to add comment");
         } finally {
             setIsCommenting(false);
@@ -82,6 +85,7 @@ const PostCard = ({
             if (result.success) toast.success("Post deleted successfully");
             else throw new Error(result.error);
         } catch (error) {
+            console.log(error);
             toast.error("Failed to delete post");
         } finally {
             setIsDeleting(false);
